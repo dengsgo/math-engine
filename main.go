@@ -68,13 +68,13 @@ func binaryExec(expr ExprAST) float64 {
 		ast := expr.(BinaryExprAST)
 		switch ast.Lhs.(type) {
 		case BinaryExprAST:
-			l = binaryExec(ast.Lhs.(BinaryExprAST))
+			l = binaryExec(ast.Lhs)
 		default:
 			l = ast.Lhs.(NumberExprAST).Val
 		}
 		switch ast.Rhs.(type) {
 		case BinaryExprAST:
-			r = binaryExec(ast.Rhs.(BinaryExprAST))
+			r = binaryExec(ast.Rhs)
 		default:
 			r = ast.Rhs.(NumberExprAST).Val
 		}
