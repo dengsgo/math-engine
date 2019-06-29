@@ -39,7 +39,8 @@ func (b BinaryExprAST) toStr() string {
 }
 
 type AST struct {
-	Tokens    []*Token
+	Tokens []*Token
+
 	source    string
 	currTok   *Token
 	currIndex int
