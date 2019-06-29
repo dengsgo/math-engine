@@ -26,6 +26,10 @@ func loop() {
 		if s == "" {
 			continue
 		}
+		if s == "exit" || s == "quit" || s == "q" {
+			fmt.Println("bye")
+			break
+		}
 		start := time.Now()
 		exec(s)
 		cost := time.Since(start)
