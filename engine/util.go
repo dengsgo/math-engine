@@ -1,6 +1,19 @@
-package main
+package engine
 
-func pow(x float64, n int) float64 {
+import "strings"
+
+func ErrPos(s string, pos int) string {
+	r := strings.Repeat("-", len(s)) + "\n"
+	s += "\n"
+	for i := 0; i < pos; i++ {
+		s += " "
+	}
+	s += "^\n"
+	return r + s + r
+}
+
+// the integer power of a number
+func Pow(x float64, n int) float64 {
 	if x == 0 {
 		return 0
 	}

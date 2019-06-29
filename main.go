@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math-engine/engine"
 	"os"
 	"strings"
 	"time"
@@ -40,21 +41,21 @@ func loop() {
 // engine
 func exec(exp string) {
 	// input text -> []token
-	toks, err := parse(exp)
+	toks, err := engine.Parse(exp)
 	if err != nil {
 		fmt.Println("ERROR: " + err.Error())
 		return
 	}
 	// []token -> AST Tree
-	ast := newAST(toks, exp)
-	if ast.err != nil {
-		fmt.Println("ERROR: " + ast.err.Error())
+	ast := engine.NewAST(toks, exp)
+	if ast.Err != nil {
+		fmt.Println("ERROR: " + ast.Err.Error())
 		return
 	}
 	// AST builder
-	ar := ast.parseExpression()
-	if ast.err != nil {
-		fmt.Println("ERROR: " + ast.err.Error())
+	ar := ast.ParseExpression()
+	if ast.Err != nil {
+		fmt.Println("ERROR: " + ast.Err.Error())
 		return
 	}
 	fmt.Printf("ExprAST: %+v\n", ar)
@@ -65,22 +66,22 @@ func exec(exp string) {
 }
 
 // AST traversal
-func binaryExec(expr ExprAST) float64 {
+func binaryExec(expr engine.ExprAST) float64 {
 	var l, r float64
 	switch expr.(type) {
-	case BinaryExprAST:
-		ast := expr.(BinaryExprAST)
+	case engine.BinaryExprAST:
+		ast := expr.(engine.BinaryExprAST)
 		switch ast.Lhs.(type) {
-		case BinaryExprAST:
+		case engine.BinaryExprAST:
 			l = binaryExec(ast.Lhs)
 		default:
-			l = ast.Lhs.(NumberExprAST).Val
+			l = ast.Lhs.(engine.NumberExprAST).Val
 		}
 		switch ast.Rhs.(type) {
-		case BinaryExprAST:
+		case engine.BinaryExprAST:
 			r = binaryExec(ast.Rhs)
 		default:
-			r = ast.Rhs.(NumberExprAST).Val
+			r = ast.Rhs.(engine.NumberExprAST).Val
 		}
 		switch ast.Op {
 		case "+":
@@ -94,12 +95,12 @@ func binaryExec(expr ExprAST) float64 {
 		case "%":
 			return float64(int(l) % int(r))
 		case "^":
-			return pow(l, int(r))
+			return engine.Pow(l, int(r))
 		default:
 
 		}
-	case NumberExprAST:
-		return expr.(NumberExprAST).Val
+	case engine.NumberExprAST:
+		return expr.(engine.NumberExprAST).Val
 	}
 
 	return 0.0

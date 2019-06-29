@@ -1,4 +1,4 @@
-package main
+package engine
 
 import (
 	"errors"
@@ -44,16 +44,16 @@ type AST struct {
 	currTok   *Token
 	currIndex int
 
-	err error
+	Err error
 }
 
-func newAST(toks []*Token, s string) *AST {
+func NewAST(toks []*Token, s string) *AST {
 	a := &AST{
 		Tokens: toks,
 		source: s,
 	}
 	if a.Tokens == nil || len(a.Tokens) == 0 {
-		a.err = errors.New("empty token")
+		a.Err = errors.New("empty token")
 	} else {
 		a.currIndex = 0
 		a.currTok = a.Tokens[0]
@@ -61,7 +61,7 @@ func newAST(toks []*Token, s string) *AST {
 	return a
 }
 
-func (a *AST) parseExpression() ExprAST {
+func (a *AST) ParseExpression() ExprAST {
 	lhs := a.parsePrimary()
 	return a.parseBinOpRHS(0, lhs)
 }
@@ -85,11 +85,11 @@ func (a *AST) getTokPrecedence() int {
 func (a *AST) parseNumber() NumberExprAST {
 	f64, err := strconv.ParseFloat(a.currTok.Tok, 64)
 	if err != nil {
-		a.err = errors.New(
+		a.Err = errors.New(
 			fmt.Sprintf("%v\nwant '(' or '0-9' but get '%s'\n%s",
 				err.Error(),
 				a.currTok.Tok,
-				errPos(a.source, a.currTok.offset)))
+				ErrPos(a.source, a.currTok.Offset)))
 		return NumberExprAST{}
 	}
 	n := NumberExprAST{
@@ -106,15 +106,15 @@ func (a *AST) parsePrimary() ExprAST {
 	case Operator:
 		if a.currTok.Tok == "(" {
 			a.getNextToken()
-			e := a.parseExpression()
+			e := a.ParseExpression()
 			if e == nil {
 				return nil
 			}
 			if a.currTok.Tok != ")" {
-				a.err = errors.New(
+				a.Err = errors.New(
 					fmt.Sprintf("want ')' but get %s\n%s",
 						a.currTok.Tok,
-						errPos(a.source, a.currTok.offset)))
+						ErrPos(a.source, a.currTok.Offset)))
 				return nil
 			}
 			a.getNextToken()

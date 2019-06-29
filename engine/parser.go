@@ -1,9 +1,8 @@
-package main
+package engine
 
 import (
 	"errors"
 	"fmt"
-	"strings"
 )
 
 const (
@@ -17,7 +16,7 @@ type Token struct {
 	Type int
 	Flag int
 
-	offset int
+	Offset int
 }
 
 type Parser struct {
@@ -28,7 +27,7 @@ type Parser struct {
 	err error
 }
 
-func parse(s string) ([]*Token, error) {
+func Parse(s string) ([]*Token, error) {
 	p := &Parser{
 		Source: s,
 		err:    nil,
@@ -77,7 +76,7 @@ func (p *Parser) nextTok() *Token {
 			Tok:  string(p.ch),
 			Type: Operator,
 		}
-		tok.offset = start
+		tok.Offset = start
 		err = p.nextCh()
 
 	case
@@ -97,14 +96,14 @@ func (p *Parser) nextTok() *Token {
 			Tok:  p.Source[start:p.offset],
 			Type: Literal,
 		}
-		tok.offset = start
+		tok.Offset = start
 
 	default:
 		if p.ch != ' ' {
 			s := fmt.Sprintf("symbol error: unkown '%v', pos [%v:]\n%s",
 				string(p.ch),
 				start,
-				errPos(p.Source, start))
+				ErrPos(p.Source, start))
 			p.err = errors.New(s)
 		}
 	}
@@ -131,14 +130,4 @@ func (p *Parser) isWhitespace(c byte) bool {
 
 func (p *Parser) isDigitNum(c byte) bool {
 	return '0' <= c && c <= '9' || c == '.'
-}
-
-func errPos(s string, pos int) string {
-	r := strings.Repeat("-", len(s)) + "\n"
-	s += "\n"
-	for i := 0; i < pos; i++ {
-		s += " "
-	}
-	s += "^\n"
-	return r + s + r
 }
