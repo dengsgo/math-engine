@@ -38,3 +38,44 @@ func calPow(x float64, n int) float64 {
 	}
 	return r
 }
+
+// AST traversal
+func ExprASTResult(expr ExprAST) float64 {
+	var l, r float64
+	switch expr.(type) {
+	case BinaryExprAST:
+		ast := expr.(BinaryExprAST)
+		switch ast.Lhs.(type) {
+		case BinaryExprAST:
+			l = ExprASTResult(ast.Lhs)
+		default:
+			l = ast.Lhs.(NumberExprAST).Val
+		}
+		switch ast.Rhs.(type) {
+		case BinaryExprAST:
+			r = ExprASTResult(ast.Rhs)
+		default:
+			r = ast.Rhs.(NumberExprAST).Val
+		}
+		switch ast.Op {
+		case "+":
+			return l + r
+		case "-":
+			return l - r
+		case "*":
+			return l * r
+		case "/":
+			return l / r
+		case "%":
+			return float64(int(l) % int(r))
+		case "^":
+			return Pow(l, int(r))
+		default:
+
+		}
+	case NumberExprAST:
+		return expr.(NumberExprAST).Val
+	}
+
+	return 0.0
+}

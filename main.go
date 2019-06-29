@@ -38,7 +38,7 @@ func loop() {
 	}
 }
 
-// engine
+// call engine
 func exec(exp string) {
 	// input text -> []token
 	toks, err := engine.Parse(exp)
@@ -60,48 +60,7 @@ func exec(exp string) {
 	}
 	fmt.Printf("ExprAST: %+v\n", ar)
 	// AST traversal -> result
-	r := binaryExec(ar)
+	r := engine.ExprASTResult(ar)
 	fmt.Println("binaryExec:", r)
 	fmt.Printf("%s = %v\n", exp, r)
-}
-
-// AST traversal
-func binaryExec(expr engine.ExprAST) float64 {
-	var l, r float64
-	switch expr.(type) {
-	case engine.BinaryExprAST:
-		ast := expr.(engine.BinaryExprAST)
-		switch ast.Lhs.(type) {
-		case engine.BinaryExprAST:
-			l = binaryExec(ast.Lhs)
-		default:
-			l = ast.Lhs.(engine.NumberExprAST).Val
-		}
-		switch ast.Rhs.(type) {
-		case engine.BinaryExprAST:
-			r = binaryExec(ast.Rhs)
-		default:
-			r = ast.Rhs.(engine.NumberExprAST).Val
-		}
-		switch ast.Op {
-		case "+":
-			return l + r
-		case "-":
-			return l - r
-		case "*":
-			return l * r
-		case "/":
-			return l / r
-		case "%":
-			return float64(int(l) % int(r))
-		case "^":
-			return engine.Pow(l, int(r))
-		default:
-
-		}
-	case engine.NumberExprAST:
-		return expr.(engine.NumberExprAST).Val
-	}
-
-	return 0.0
 }
