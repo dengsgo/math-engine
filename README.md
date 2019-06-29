@@ -80,6 +80,7 @@ progressing ...  -639.6
 
 go version 1.12  
 ```go
+go test
 go build
 ./math-engine
 ```
