@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math-engine/engine"
+	"github.com/dengsgo/math-engine/engine"
 	"os"
 	"strings"
 	"time"
