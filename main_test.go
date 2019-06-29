@@ -46,3 +46,13 @@ func TestExecI(t *testing.T) {
 	exp := "0.8888-0.1 * (444         -0.2)"
 	exec(exp)
 }
+
+func TestExecJ(t *testing.T) {
+	exp := "1_234_567*2-3"
+	exec(exp)
+}
+
+func TestExecK(t *testing.T) {
+	exp := "2.3e4*4/3"
+	exec(exp)
+}
