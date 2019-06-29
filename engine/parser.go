@@ -3,6 +3,7 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -94,7 +95,7 @@ func (p *Parser) nextTok() *Token {
 		for p.isDigitNum(p.ch) && p.nextCh() == nil {
 		}
 		tok = &Token{
-			Tok:  p.Source[start:p.offset],
+			Tok:  strings.ReplaceAll(p.Source[start:p.offset], "_", ""),
 			Type: Literal,
 		}
 		tok.Offset = start
@@ -130,5 +131,5 @@ func (p *Parser) isWhitespace(c byte) bool {
 }
 
 func (p *Parser) isDigitNum(c byte) bool {
-	return '0' <= c && c <= '9' || c == '.'
+	return '0' <= c && c <= '9' || c == '.' || c == '_' || c == 'e'
 }
