@@ -134,7 +134,9 @@ func (a *AST) parseBinOpRHS(execPrec int, lhs ExprAST) ExprAST {
 			return lhs
 		}
 		binOp := a.currTok.Tok
-		a.getNextToken()
+		if a.getNextToken() == nil {
+			return lhs
+		}
 		rhs := a.parsePrimary()
 		if rhs == nil {
 			return nil
