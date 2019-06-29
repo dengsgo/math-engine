@@ -71,6 +71,7 @@ func (p *Parser) nextTok() *Token {
 		'-',
 		'*',
 		'/',
+		'^',
 		'%':
 		tok = &Token{
 			Tok:  string(p.ch),

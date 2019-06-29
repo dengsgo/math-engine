@@ -93,6 +93,8 @@ func binaryExec(expr ExprAST) float64 {
 			return l / r
 		case "%":
 			return float64(int(l) % int(r))
+		case "^":
+			return pow(l, int(r))
 		default:
 
 		}
