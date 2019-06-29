@@ -52,7 +52,6 @@ func exec(exp string) {
 		fmt.Println("ERROR: " + ast.Err.Error())
 		return
 	}
-	fmt.Println(11111)
 	// AST builder
 	ar := ast.ParseExpression()
 	if ast.Err != nil {
