@@ -61,6 +61,6 @@ func exec(exp string) {
 	fmt.Printf("ExprAST: %+v\n", ar)
 	// AST traversal -> result
 	r := engine.ExprASTResult(ar)
-	fmt.Println("binaryExec:", r)
+	fmt.Println("progressing ...\t", r)
 	fmt.Printf("%s = %v\n", exp, r)
 }
