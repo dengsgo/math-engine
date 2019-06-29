@@ -2,6 +2,8 @@
 
 使用 Go 实现的数学表达式微型计算引擎，无任何依赖，相对比较完整的完成了数学表达式解析执行，包括词法分析、语法分析、构建AST、运行。  
 
+[Demo](http://wx3.sinaimg.cn/large/c2a95e3dly1g4i4unamlhg211o0iokk1.gif)
+
 ## TODO  
 ### 已实现  
   
