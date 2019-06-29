@@ -12,8 +12,8 @@ const (
 )
 
 type Token struct {
-	Tok  string
-	Type int
+	Tok string
+	Type,
 	Flag int
 
 	Offset int
@@ -21,6 +21,7 @@ type Token struct {
 
 type Parser struct {
 	Source string
+
 	ch     byte
 	offset int
 
