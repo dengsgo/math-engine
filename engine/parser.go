@@ -8,12 +8,16 @@ import (
 
 const (
 	Identifier = iota
+	// e.g. 50
 	Literal
+	// e.g. + - * /
 	Operator
 )
 
 type Token struct {
+	// raw characters
 	Tok string
+	// type with Literal/Operator
 	Type,
 	Flag int
 
