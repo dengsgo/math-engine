@@ -100,6 +100,6 @@ go build
 
 [Github Releases](https://github.com/dengsgo/math-engine/releases)  
 
-## 实现原理  
+## 实现细节    
 
-TODO
+请阅读我的博客文章：[用 Go 实现一个完整的数学表达式计算引擎](https://www.yoytang.com/math-expression-engine.html)
