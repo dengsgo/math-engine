@@ -71,3 +71,18 @@ func TestExecN(t *testing.T) {
 	exp := "-1+9-88+(-88)*666-1"
 	exec(exp)
 }
+
+func TestExecO(t *testing.T) {
+	exp := "-(1)+(3)-(-3)*7-((-3))"
+	exec(exp)
+}
+
+func TestExecP(t *testing.T) {
+	exp := "-(-9+3)"
+	exec(exp)
+}
+
+func TestExecQ(t *testing.T) {
+	exp := "2e-3*2+2e2+1"
+	exec(exp)
+}
