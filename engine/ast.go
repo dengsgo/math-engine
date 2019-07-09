@@ -120,11 +120,13 @@ func (a *AST) parsePrimary() ExprAST {
 			}
 			a.getNextToken()
 			return e
-		} else if a.currTok.Tok=="-" {
+		} else if a.currTok.Tok == "-" {
 			a.getNextToken()
-			f64 := a.parseNumber()
-			f64.Val = -f64.Val
-			return f64
+			return BinaryExprAST{
+				Op:  "-",
+				Lhs: NumberExprAST{},
+				Rhs: a.parsePrimary(),
+			}
 		} else {
 			return a.parseNumber()
 		}
