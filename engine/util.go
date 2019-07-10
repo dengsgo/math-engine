@@ -111,12 +111,7 @@ func ExprASTResult(expr ExprAST) float64 {
 		return expr.(NumberExprAST).Val
 	case FunCallerExprAST:
 		f := expr.(FunCallerExprAST)
-		if fun, ok := definedFunc[f.Name]; ok {
-			return fun(f.Arg)
-		} else {
-			// log error msg
-			return 0.0
-		}
+		return definedFunc[f.Name](f.Arg)
 	}
 
 	return 0.0
