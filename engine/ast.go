@@ -113,43 +113,63 @@ func (a *AST) parseNumber() NumberExprAST {
 	return n
 }
 
-func (a *AST) parseFunCaller() FunCallerExprAST {
-	f := FunCallerExprAST{}
+func (a *AST) parseFunCallerOrConst() ExprAST {
 	name := a.currTok.Tok
 	a.getNextToken()
-	if a.currTok.Tok != "(" {
-		a.Err = errors.New(
-			fmt.Sprintf("call function `%s` failed, want '(' but get '%s'\n%s",
-				name,
-				a.currTok.Tok,
-				ErrPos(a.source, a.currTok.Offset)))
+	// call func
+	if a.currTok.Tok == "(" {
+		f := FunCallerExprAST{}
+		if _, ok := definedFunc[name]; !ok {
+			a.Err = errors.New(
+				fmt.Sprintf("function `%s` is undefined\n%s",
+					name,
+					ErrPos(a.source, a.currTok.Offset)))
+			return f
+		}
+		a.getNextToken()
+		expr := a.ParseExpression()
+		if a.currTok.Tok != ")" {
+			a.Err = errors.New(
+				fmt.Sprintf("wrong way calling function `%s`, want ')' but get '%s'\n%s",
+					name,
+					a.currTok.Tok,
+					ErrPos(a.source, a.currTok.Offset)))
+			return f
+		}
+		a.getNextToken()
+		f.Name = name
+		f.Arg = expr
 		return f
 	}
-	a.getNextToken()
-	expr := a.ParseExpression()
-	if a.currTok.Tok != ")" {
+	// call const
+	if v, ok := definedConst[name]; ok {
+		return NumberExprAST{
+			Val: v,
+		}
+	} else {
 		a.Err = errors.New(
-			fmt.Sprintf("call function `%s` failed, want ')' but get '%s'\n%s",
+			fmt.Sprintf("const `%s` is undefined\n%s",
 				name,
-				a.currTok.Tok,
 				ErrPos(a.source, a.currTok.Offset)))
-		return f
+		return NumberExprAST{}
 	}
-	a.getNextToken()
-	f.Name = name
-	f.Arg = expr
-	return f
 }
 
 func (a *AST) parsePrimary() ExprAST {
 	switch a.currTok.Type {
 	case Identifier:
-		return a.parseFunCaller()
+		return a.parseFunCallerOrConst()
 	case Literal:
 		return a.parseNumber()
 	case Operator:
 		if a.currTok.Tok == "(" {
-			a.getNextToken()
+			t := a.getNextToken()
+			if t == nil {
+				a.Err = errors.New(
+					fmt.Sprintf("want '0-9' but nothing at all\n%s",
+						ErrPos(a.source, a.currTok.Offset)))
+				return nil
+			}
 			e := a.ParseExpression()
 			if e == nil {
 				return nil

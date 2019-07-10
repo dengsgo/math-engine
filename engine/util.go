@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+var definedConst = map[string]float64{
+	"pi": math.Pi,
+}
+
 var definedFunc map[string]func(expr ExprAST) float64
 
 func initFunc() {
