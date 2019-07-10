@@ -1,6 +1,22 @@
 package engine
 
-import "strings"
+import (
+	"math"
+	"strings"
+)
+
+var definedFunc map[string]func(expr ExprAST) float64
+
+func initFunc() {
+	definedFunc = map[string]func(expr ExprAST) float64{
+		"sin": definedSin,
+		"cos": definedCos,
+		"tan": definedTan,
+		"cot": definedCot,
+		"sec": definedSec,
+		"csc": definedCsc,
+	}
+}
 
 func ErrPos(s string, pos int) string {
 	r := strings.Repeat("-", len(s)) + "\n"
@@ -39,24 +55,38 @@ func calPow(x float64, n int) float64 {
 	return r
 }
 
+func definedSin(expr ExprAST) float64 {
+	return math.Sin(ExprASTResult(expr))
+}
+
+func definedCos(expr ExprAST) float64 {
+	return math.Cos(ExprASTResult(expr))
+}
+
+func definedTan(expr ExprAST) float64 {
+	return math.Tan(ExprASTResult(expr))
+}
+
+func definedCot(expr ExprAST) float64 {
+	return 1 / definedTan(expr)
+}
+
+func definedSec(expr ExprAST) float64 {
+	return 1 / definedCos(expr)
+}
+
+func definedCsc(expr ExprAST) float64 {
+	return 1 / definedSin(expr)
+}
+
 // AST traversal
 func ExprASTResult(expr ExprAST) float64 {
 	var l, r float64
 	switch expr.(type) {
 	case BinaryExprAST:
 		ast := expr.(BinaryExprAST)
-		switch ast.Lhs.(type) {
-		case BinaryExprAST:
-			l = ExprASTResult(ast.Lhs)
-		default:
-			l = ast.Lhs.(NumberExprAST).Val
-		}
-		switch ast.Rhs.(type) {
-		case BinaryExprAST:
-			r = ExprASTResult(ast.Rhs)
-		default:
-			r = ast.Rhs.(NumberExprAST).Val
-		}
+		l = ExprASTResult(ast.Lhs)
+		r = ExprASTResult(ast.Rhs)
 		switch ast.Op {
 		case "+":
 			return l + r
@@ -75,6 +105,14 @@ func ExprASTResult(expr ExprAST) float64 {
 		}
 	case NumberExprAST:
 		return expr.(NumberExprAST).Val
+	case FunCallerExprAST:
+		f := expr.(FunCallerExprAST)
+		if fun, ok := definedFunc[f.Name]; ok {
+			return fun(f.Arg)
+		} else {
+			// log error msg
+			return 0.0
+		}
 	}
 
 	return 0.0

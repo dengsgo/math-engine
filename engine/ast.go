@@ -22,6 +22,11 @@ type BinaryExprAST struct {
 	Rhs ExprAST
 }
 
+type FunCallerExprAST struct {
+	Name string
+	Arg  ExprAST
+}
+
 func (n NumberExprAST) toStr() string {
 	return fmt.Sprintf(
 		"NumberExprAST:%s",
@@ -35,6 +40,13 @@ func (b BinaryExprAST) toStr() string {
 		b.Op,
 		b.Lhs.toStr(),
 		b.Rhs.toStr(),
+	)
+}
+
+func (n FunCallerExprAST) toStr() string {
+	return fmt.Sprintf(
+		"FunCallerExprAST:%s",
+		n.Name,
 	)
 }
 
@@ -59,6 +71,7 @@ func NewAST(toks []*Token, s string) *AST {
 		a.currIndex = 0
 		a.currTok = a.Tokens[0]
 	}
+	initFunc()
 	return a
 }
 
@@ -100,8 +113,38 @@ func (a *AST) parseNumber() NumberExprAST {
 	return n
 }
 
+func (a *AST) parseFunCaller() FunCallerExprAST {
+	f := FunCallerExprAST{}
+	name := a.currTok.Tok
+	a.getNextToken()
+	if a.currTok.Tok != "(" {
+		a.Err = errors.New(
+			fmt.Sprintf("call function `%s` failed, want '(' but get '%s'\n%s",
+				name,
+				a.currTok.Tok,
+				ErrPos(a.source, a.currTok.Offset)))
+		return f
+	}
+	a.getNextToken()
+	expr := a.ParseExpression()
+	if a.currTok.Tok != ")" {
+		a.Err = errors.New(
+			fmt.Sprintf("call function `%s` failed, want ')' but get '%s'\n%s",
+				name,
+				a.currTok.Tok,
+				ErrPos(a.source, a.currTok.Offset)))
+		return f
+	}
+	a.getNextToken()
+	f.Name = name
+	f.Arg = expr
+	return f
+}
+
 func (a *AST) parsePrimary() ExprAST {
 	switch a.currTok.Type {
+	case Identifier:
+		return a.parseFunCaller()
 	case Literal:
 		return a.parseNumber()
 	case Operator:
@@ -122,11 +165,12 @@ func (a *AST) parsePrimary() ExprAST {
 			return e
 		} else if a.currTok.Tok == "-" {
 			a.getNextToken()
-			return BinaryExprAST{
+			bin := BinaryExprAST{
 				Op:  "-",
 				Lhs: NumberExprAST{},
 				Rhs: a.parsePrimary(),
 			}
+			return bin
 		} else {
 			return a.parseNumber()
 		}

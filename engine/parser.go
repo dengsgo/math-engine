@@ -108,7 +108,15 @@ func (p *Parser) nextTok() *Token {
 		tok.Offset = start
 
 	default:
-		if p.ch != ' ' {
+		if p.isChar(p.ch) {
+			for p.isChar(p.ch) && p.nextCh() == nil {
+			}
+			tok = &Token{
+				Tok:  p.Source[start:p.offset],
+				Type: Identifier,
+			}
+			tok.Offset = start
+		} else if p.ch != ' ' {
 			s := fmt.Sprintf("symbol error: unkown '%v', pos [%v:]\n%s",
 				string(p.ch),
 				start,
@@ -139,4 +147,8 @@ func (p *Parser) isWhitespace(c byte) bool {
 
 func (p *Parser) isDigitNum(c byte) bool {
 	return '0' <= c && c <= '9' || c == '.' || c == '_' || c == 'e' || c == '-'
+}
+
+func (p *Parser) isChar(c byte) bool {
+	return 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z'
 }
