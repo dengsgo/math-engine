@@ -5,23 +5,6 @@ import (
 	"strings"
 )
 
-var definedConst = map[string]float64{
-	"pi": math.Pi,
-}
-
-var definedFunc map[string]func(expr ExprAST) float64
-
-func init() {
-	definedFunc = map[string]func(expr ExprAST) float64{
-		"sin": definedSin,
-		"cos": definedCos,
-		"tan": definedTan,
-		"cot": definedCot,
-		"sec": definedSec,
-		"csc": definedCsc,
-	}
-}
-
 func ErrPos(s string, pos int) string {
 	r := strings.Repeat("-", len(s)) + "\n"
 	s += "\n"
@@ -67,30 +50,6 @@ func radian2Angle(i float64) float64 {
 	return i / math.Pi * 180
 }
 
-func definedSin(expr ExprAST) float64 {
-	return math.Sin(ExprASTResult(expr))
-}
-
-func definedCos(expr ExprAST) float64 {
-	return math.Cos(ExprASTResult(expr))
-}
-
-func definedTan(expr ExprAST) float64 {
-	return math.Tan(ExprASTResult(expr))
-}
-
-func definedCot(expr ExprAST) float64 {
-	return 1 / definedTan(expr)
-}
-
-func definedSec(expr ExprAST) float64 {
-	return 1 / definedCos(expr)
-}
-
-func definedCsc(expr ExprAST) float64 {
-	return 1 / definedSin(expr)
-}
-
 // AST traversal
 func ExprASTResult(expr ExprAST) float64 {
 	var l, r float64
@@ -119,7 +78,7 @@ func ExprASTResult(expr ExprAST) float64 {
 		return expr.(NumberExprAST).Val
 	case FunCallerExprAST:
 		f := expr.(FunCallerExprAST)
-		return definedFunc[f.Name](f.Arg)
+		return defFunc[f.Name](f.Arg)
 	}
 
 	return 0.0

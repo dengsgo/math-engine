@@ -118,7 +118,7 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 	// call func
 	if a.currTok.Tok == "(" {
 		f := FunCallerExprAST{}
-		if _, ok := definedFunc[name]; !ok {
+		if _, ok := defFunc[name]; !ok {
 			a.Err = errors.New(
 				fmt.Sprintf("function `%s` is undefined\n%s",
 					name,
@@ -141,7 +141,7 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 		return f
 	}
 	// call const
-	if v, ok := definedConst[name]; ok {
+	if v, ok := defConst[name]; ok {
 		return NumberExprAST{
 			Val: v,
 		}
