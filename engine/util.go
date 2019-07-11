@@ -5,6 +5,24 @@ import (
 	"strings"
 )
 
+// Top level function
+// Analytical expression and execution
+func ParseAndExec(s string) (float64, error) {
+	toks, err := Parse(s)
+	if err != nil {
+		return 0, err
+	}
+	ast := NewAST(toks, s)
+	if ast.Err != nil {
+		return 0, ast.Err
+	}
+	ar := ast.ParseExpression()
+	if ast.Err != nil {
+		return 0, ast.Err
+	}
+	return ExprASTResult(ar), nil
+}
+
 func ErrPos(s string, pos int) string {
 	r := strings.Repeat("-", len(s)) + "\n"
 	s += "\n"
@@ -50,6 +68,7 @@ func expr2Radian(expr ExprAST) float64 {
 	return r
 }
 
+// Top level function
 // AST traversal
 func ExprASTResult(expr ExprAST) float64 {
 	var l, r float64
