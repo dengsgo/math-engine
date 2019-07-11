@@ -59,6 +59,14 @@ func calPow(x float64, n int) float64 {
 	return r
 }
 
+func angle2Radian(i float64) float64 {
+	return i / 180 * math.Pi
+}
+
+func radian2Angle(i float64) float64 {
+	return i / math.Pi * 180
+}
+
 func definedSin(expr ExprAST) float64 {
 	return math.Sin(ExprASTResult(expr))
 }
