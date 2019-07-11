@@ -42,12 +42,12 @@ func calPow(x float64, n int) float64 {
 	return r
 }
 
-func angle2Radian(i float64) float64 {
-	return i / 180 * math.Pi
-}
-
-func radian2Angle(i float64) float64 {
-	return i / math.Pi * 180
+func expr2Radian(expr ExprAST) float64 {
+	r := ExprASTResult(expr)
+	if TrigonometricMode == AngleMode {
+		r = r / 180 * math.Pi
+	}
+	return r
 }
 
 // AST traversal

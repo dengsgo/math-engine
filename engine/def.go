@@ -2,6 +2,14 @@ package engine
 
 import "math"
 
+const (
+	RadianMode = iota
+	AngleMode
+)
+
+// enum "RadianMode", "AngleMode"
+var TrigonometricMode = RadianMode
+
 var defConst = map[string]float64{
 	"pi": math.Pi,
 }
@@ -27,17 +35,17 @@ func init() {
 
 // sin(pi/2) = 1
 func defSin(expr ExprAST) float64 {
-	return math.Sin(ExprASTResult(expr))
+	return math.Sin(expr2Radian(expr))
 }
 
 // cos(0) = 1
 func defCos(expr ExprAST) float64 {
-	return math.Cos(ExprASTResult(expr))
+	return math.Cos(expr2Radian(expr))
 }
 
 // tan(pi/4) = 1
 func defTan(expr ExprAST) float64 {
-	return math.Tan(ExprASTResult(expr))
+	return math.Tan(expr2Radian(expr))
 }
 
 // cot(pi/4) = 1
