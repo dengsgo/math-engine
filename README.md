@@ -38,33 +38,6 @@
 | `sqrt(x)`  | 平方根，Square root          | sqrt(4) = 2                  |
 | `cbrt(x)`  | 立方根，Cube root            | cbrt(27) = 3                 |
 
-## TODO  
-### 已实现  
-
-- [x] 加 `+`  
-- [x] 减 `-`  
-- [x] 乘 `*`  
-- [x] 除 `/`  
-- [x] 取余 `%`  
-- [x] 整数次方 `^`  
-- [x] 科学计数法 e.g. `1.2e7`、  `1.2e-7`
-- [x] 括号 `()`  
-- [x] 混合运算 e.g. `1+2*6/4+(456-8*9.2)-(2+4^5)*2e3+1.2e-2`  
-- [x] 友好的长数字 e.g. `123_456_789`  
-- [x] 友好的错误消息 e.g.    
-```bash
-input /> 123+89-0.0.9
-ERROR: strconv.ParseFloat: parsing "0.0.9": invalid syntax
-want '(' or '0-9' but get '0.0.9'
-------------
-123+89-0.0.9
-       ^
-------------
-```
-
-### 待实现  
-
-- [ ] 精确的浮点计算    
 
 ## Usage  
 
@@ -76,7 +49,26 @@ go get -u github.com/dengsgo/math-engine
 ```go
 import "github.com/dengsgo/math-engine/engine"
 ```
-e.g. :  
+e.g. 1 直接调用解析执行函数 :
+
+```go
+import "github.com/dengsgo/math-engine/engine"
+
+func main() {
+	s := "1 + 2 * 6 / 4 + (456 - 8 * 9.2) - (2 + 4 ^ 5)"
+  // call top level function
+  r, err := engine.ParseAndExec(s)
+  if err != nil {
+    fmt.Println(err)
+  }
+  fmt.Printf("%s = %v", s, r)
+}
+```
+
+
+
+e.g. 2 依次调用函数，手动执行 :  
+
 ```go
 import "github.com/dengsgo/math-engine/engine"
 
@@ -86,6 +78,7 @@ func main() {
 }
 
 // call engine
+// one by one
 func exec(exp string) {
 	// input text -> []token
 	toks, err := engine.Parse(exp)
@@ -119,6 +112,9 @@ progressing ...  -639.6
 1+2*6/4+(456-8*9.2)-(2+4^5) = -639.6
 ```
 
+## Document
+
+// todo
 
 ## Compile    
 
@@ -135,4 +131,36 @@ go build
 
 ## 实现细节    
 
-请阅读我的博客文章：[用 Go 实现一个完整的数学表达式计算引擎](https://www.yoytang.com/math-expression-engine.html)
+请阅读我的博客文章：[用 Go 实现一个完整的数学表达式计算引擎](https://www.yoytang.com/math-expression-engine.html)  
+
+## TODO  
+### 已实现  
+
+- [x] 加 `+`  
+- [x] 减 `-`  
+- [x] 乘 `*`  
+- [x] 除 `/`  
+- [x] 取余 `%`  
+- [x] 整数次方 `^`  
+- [x] 科学计数法 e.g. `1.2e7`、  `1.2e-7`
+- [x] 括号 `()`  
+- [x] 混合运算 e.g. `1+2*6/4+(456-8*9.2)-(2+4^5)*2e3+1.2e-2`  
+- [x] 友好的长数字 e.g. `123_456_789`  
+- [x] 三角函数 e.g. `sin, cos, tan, cot, sec, csc`
+- [x] 常量 pi
+- [x] 辅助函数 e.g. `abs, ceil, floor, sqrt, cbrt`
+- [x] 友好的错误消息 e.g.    
+```bash
+input /> 123+89-0.0.9
+ERROR: strconv.ParseFloat: parsing "0.0.9": invalid syntax
+want '(' or '0-9' but get '0.0.9'
+------------
+123+89-0.0.9
+       ^
+------------
+```
+
+### 待实现  
+
+- [ ] 精确的浮点计算    
+- [ ] 更多的辅助函数
