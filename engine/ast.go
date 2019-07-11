@@ -71,7 +71,6 @@ func NewAST(toks []*Token, s string) *AST {
 		a.currIndex = 0
 		a.currTok = a.Tokens[0]
 	}
-	initFunc()
 	return a
 }
 

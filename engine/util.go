@@ -11,7 +11,7 @@ var definedConst = map[string]float64{
 
 var definedFunc map[string]func(expr ExprAST) float64
 
-func initFunc() {
+func init() {
 	definedFunc = map[string]func(expr ExprAST) float64{
 		"sin": definedSin,
 		"cos": definedCos,
