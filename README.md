@@ -123,7 +123,7 @@ import "github.com/dengsgo/math-engine/engine"
 
 func main() {
   s := "1 + sin(90)"
-	engine.TrigonometricMode = engine.AngleMode
+  engine.TrigonometricMode = engine.AngleMode
   engine.ParseAndExec(s) // will return 2, nil
   s = "1 + sin(pi/2)"
   engine.TrigonometricMode = engine.RadianMode
