@@ -55,7 +55,7 @@ e.g. 1 直接调用解析执行函数 :
 import "github.com/dengsgo/math-engine/engine"
 
 func main() {
-	s := "1 + 2 * 6 / 4 + (456 - 8 * 9.2) - (2 + 4 ^ 5)"
+  s := "1 + 2 * 6 / 4 + (456 - 8 * 9.2) - (2 + 4 ^ 5)"
   // call top level function
   r, err := engine.ParseAndExec(s)
   if err != nil {
@@ -112,14 +112,36 @@ progressing ...  -639.6
 1+2*6/4+(456-8*9.2)-(2+4^5) = -639.6
 ```
 
+## TrigonometricMode
+
+三角函数的参数类型默认为弧度`RadianMode`，e.g. `sin(pi/2) = 1`.
+
+你可以通过设置 `TrigonometricMode` 调整参数类型，可选 弧度`RadianMode`、角度`AngleMode`，e.g. :
+
+```go
+import "github.com/dengsgo/math-engine/engine"
+
+func main() {
+  s := "1 + sin(90)"
+	engine.TrigonometricMode = engine.AngleMode
+  engine.ParseAndExec(s) // will return 2, nil
+  s = "1 + sin(pi/2)"
+  engine.TrigonometricMode = engine.RadianMode
+  engine.ParseAndExec(s) // will return 2, nil
+}
+```
+
+
+
 ## Document
 
-// todo
+[godoc.org/github.com/dengsgo/math-engine/engine](https://godoc.org/github.com/dengsgo/math-engine/engine)
 
 ## Compile    
 
 go version 1.12  
 ```go
+# Compile Demo
 go test
 go build
 ./math-engine
