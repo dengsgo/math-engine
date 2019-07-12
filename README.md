@@ -10,7 +10,9 @@
 - `sin(pi/2)+cos(45-45*1)+tan(pi/4)`  
 - `99+abs(-1)-ceil(88.8)+floor(88.8)`
 
-[Demo](http://wx3.sinaimg.cn/large/c2a95e3dly1g4i4unamlhg211o0iokk1.gif)
+### Demo
+
+[![asciicast](https://asciinema.org/a/09sARmZT1D5VUnSWvL0uXlj3S.svg)](https://asciinema.org/a/09sARmZT1D5VUnSWvL0uXlj3S)
 
 ## Method Support
 
