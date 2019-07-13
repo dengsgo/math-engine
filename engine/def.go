@@ -28,6 +28,7 @@ func init() {
 		"abs":   defAbs,
 		"ceil":  defCeil,
 		"floor": defFloor,
+		"round": defRound,
 		"sqrt":  defSqrt,
 		"cbrt":  defCbrt,
 	}
@@ -76,6 +77,12 @@ func defCeil(expr ExprAST) float64 {
 // floor(4.2) = floor(4.8) = 4
 func defFloor(expr ExprAST) float64 {
 	return math.Floor(ExprASTResult(expr))
+}
+
+// round(4.2) = 4
+// round(4.6) = 5
+func defRound(expr ExprAST) float64 {
+	return math.Round(ExprASTResult(expr))
 }
 
 // sqrt(4) = 2
