@@ -12,6 +12,8 @@ const (
 	Literal
 	// e.g. + - * /
 	Operator
+	// ,
+	COMMA
 )
 
 type Token struct {
@@ -106,6 +108,14 @@ func (p *Parser) nextTok() *Token {
 			Type: Literal,
 		}
 		tok.Offset = start
+
+	case ',':
+		tok = &Token{
+			Tok:  string(p.ch),
+			Type: COMMA,
+		}
+		tok.Offset = start
+		err = p.nextCh()
 
 	default:
 		if p.isChar(p.ch) {

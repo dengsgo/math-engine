@@ -24,7 +24,12 @@ type BinaryExprAST struct {
 
 type FunCallerExprAST struct {
 	Name string
-	Arg  ExprAST
+	Arg  []ExprAST
+}
+
+type FunCallerArgs struct {
+	Arg []ExprAST
+	C   int
 }
 
 func (n NumberExprAST) toStr() string {
@@ -126,18 +131,25 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 			return f
 		}
 		a.getNextToken()
-		expr := a.ParseExpression()
-		if a.currTok.Tok != ")" {
+		exprs := make([]ExprAST, 0)
+		exprs = append(exprs, a.ParseExpression())
+		for a.currTok.Tok != ")" && a.getNextToken() != nil {
+			if a.currTok.Type == COMMA {
+				continue
+			}
+			exprs = append(exprs, a.ParseExpression())
+		}
+		if len(exprs) != defFunC[name] {
 			a.Err = errors.New(
-				fmt.Sprintf("wrong way calling function `%s`, want ')' but get '%s'\n%s",
+				fmt.Sprintf("wrong way calling function `%s`, parameters want %d but get %d\n%s",
 					name,
-					a.currTok.Tok,
+					defFunC[name],
+					len(exprs),
 					ErrPos(a.source, a.currTok.Offset)))
-			return f
 		}
 		a.getNextToken()
 		f.Name = name
-		f.Arg = expr
+		f.Arg = exprs
 		return f
 	}
 	// call const
@@ -193,6 +205,12 @@ func (a *AST) parsePrimary() ExprAST {
 		} else {
 			return a.parseNumber()
 		}
+	case COMMA:
+		a.Err = errors.New(
+			fmt.Sprintf("want '(' or '0-9' but get %s\n%s",
+				a.currTok.Tok,
+				ErrPos(a.source, a.currTok.Offset)))
+		return nil
 	default:
 		return nil
 	}
