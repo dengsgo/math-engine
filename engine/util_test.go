@@ -47,6 +47,12 @@ func TestParseAndExecSimple(t *testing.T) {
 		{"sqrt(4) + cbrt(27)", 5},
 		{"sqrt(2^2) + cbrt(3^3)", 5},
 		{"127^2+5/2-sqrt(2^2) + cbrt(3^3)", 16132.5},
+		{"max(2,3.5)", 3.5},
+		{"max(2^3,3+abs(-1)*6)", 9},
+		{"min(2,3.5)", 2},
+		{"min(2^3,3+abs(-1)*6)", 8},
+		{"max(2^3,3^2)", 9},
+		{"min(2^3,3^2)", 8},
 		//{"_123_456_789___", 123456789},
 	}
 	for _, e := range exprs {
@@ -101,6 +107,10 @@ func TestParseAndExecError(t *testing.T) {
 		"sin()",
 		"sin",
 		"pi(",
+		"sin(1, 50)",
+		"max(1,)",
+		"min(1,)",
+		"min(1,3, 099)",
 	}
 	for _, e := range exprs {
 		_, err := ParseAndExec(e)
