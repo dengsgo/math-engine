@@ -143,7 +143,7 @@ func main() {
 
 ## Document
 
-[godoc.org/github.com/dengsgo/math-engine/engine](https://godoc.org/github.com/dengsgo/math-engine/engine)
+[![godoc.org](https://godoc.org/github.com/dengsgo/math-engine/engine?status.svg)](https://godoc.org/github.com/dengsgo/math-engine/engine)
 
 ## Compile    
 
