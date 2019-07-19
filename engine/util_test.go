@@ -8,6 +8,10 @@ func TestParseAndExecSimple(t *testing.T) {
 		R    float64
 	}
 	exprs := []U{
+		{"1", 1},
+		{"1+", 1},
+		{"1+1 111", 2},
+		{"1+1 111+2", 2},
 		{"1+2", 3},
 		{"-1+2", 1},
 		{"-(1+2)", -3},
@@ -53,7 +57,6 @@ func TestParseAndExecSimple(t *testing.T) {
 		{"min(2^3,3+abs(-1)*6)", 8},
 		{"max(2^3,3^2)", 9},
 		{"min(2^3,3^2)", 8},
-		//{"_123_456_789___", 123456789},
 	}
 	for _, e := range exprs {
 		r, _ := ParseAndExec(e.Expr)
@@ -102,6 +105,8 @@ func TestParseAndExecError(t *testing.T) {
 	exprs := []string{
 		"(",
 		"((((((",
+		"(1",
+		"(1+",
 		"1#1",
 		"_123_456_789___",
 		"sin()",
