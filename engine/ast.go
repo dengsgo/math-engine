@@ -27,11 +27,6 @@ type FunCallerExprAST struct {
 	Arg  []ExprAST
 }
 
-type FunCallerArgs struct {
-	Arg []ExprAST
-	C   int
-}
-
 func (n NumberExprAST) toStr() string {
 	return fmt.Sprintf(
 		"NumberExprAST:%s",
