@@ -15,7 +15,7 @@
 
 ### Demo
 
-[![asciicast](https://asciinema.org/a/09sARmZT1D5VUnSWvL0uXlj3S.svg)](https://asciinema.org/a/09sARmZT1D5VUnSWvL0uXlj3S)
+[![asciicast](https://asciinema.org/a/294IJ3v5asNPRnnnU9nkfYZMc.svg)](https://asciinema.org/a/294IJ3v5asNPRnnnU9nkfYZMc)
 
 ## Method Support
 
