@@ -99,7 +99,7 @@ func (p *Parser) nextTok() *Token {
 		'8',
 		'9':
 		for p.isDigitNum(p.ch) && p.nextCh() == nil {
-			if p.ch == '-' && p.Source[p.offset-1] != 'e' {
+			if (p.ch == '-' || p.ch == '+') && p.Source[p.offset-1] != 'e' {
 				break
 			}
 		}
@@ -156,7 +156,7 @@ func (p *Parser) isWhitespace(c byte) bool {
 }
 
 func (p *Parser) isDigitNum(c byte) bool {
-	return '0' <= c && c <= '9' || c == '.' || c == '_' || c == 'e' || c == '-'
+	return '0' <= c && c <= '9' || c == '.' || c == '_' || c == 'e' || c == '-' || c == '+'
 }
 
 func (p *Parser) isChar(c byte) bool {
