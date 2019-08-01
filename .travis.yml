@@ -1,0 +1,7 @@
+language: go
+
+go:
+  - 1.12.x
+  - master
+
+script: go test ./engine -v
