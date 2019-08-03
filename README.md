@@ -1,6 +1,6 @@
 ## Math-Engine  
 
-[![Build Status](https://travis-ci.org/dengsgo/math-engine.svg?branch=master)](https://travis-ci.org/dengsgo/math-engine)  [![godoc.org](https://godoc.org/github.com/dengsgo/math-engine/engine?status.svg)](https://godoc.org/github.com/dengsgo/math-engine/engine)  
+[![Build Status](https://travis-ci.org/dengsgo/math-engine.svg?branch=master)](https://travis-ci.org/dengsgo/math-engine)  [![Go Report Card](https://goreportcard.com/badge/github.com/dengsgo/math-engine)](https://goreportcard.com/report/github.com/dengsgo/math-engine)  [![godoc.org](https://godoc.org/github.com/dengsgo/math-engine/engine?status.svg)](https://godoc.org/github.com/dengsgo/math-engine/engine)  
 
 使用 Go 实现的数学表达式解析计算引擎库，无任何依赖，相对比较完整的完成了数学表达式解析执行，包括词法分析、语法分析、构建AST、运行。  
 
