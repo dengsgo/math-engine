@@ -47,6 +47,7 @@
 | `cbrt(x)`   | 立方根，cube root            | cbrt(27) = 3                          |
 | `max(x, y)` | x, y 中的较大值              | max(2, 3) = 3                         |
 | `min(x, y)` | x, y 中的较小值              | min(2, 3) = 2                         |
+| `noerr(x)`  | 计算 x 出错时返回 0          | noerr(1 / 1)  = 1, noerr( 1/ 0 ) = 0  |
 
 
 ## Usage  
@@ -176,7 +177,7 @@ go build
 - [x] 友好的长数字 e.g. `123_456_789`  
 - [x] 三角函数 e.g. `sin, cos, tan, cot, sec, csc`
 - [x] 常量 pi
-- [x] 辅助函数 e.g. `abs, ceil, floor, sqrt, cbrt`
+- [x] 辅助函数 e.g. `abs, ceil, floor, sqrt, cbrt, max, min, noerr`
 - [x] 友好的错误消息 e.g.    
 ```bash
 input /> 123+89-0.0.9
