@@ -1,13 +1,16 @@
 package engine
 
 import (
+	"errors"
+	"fmt"
 	"math"
 	"strings"
 )
 
 // Top level function
 // Analytical expression and execution
-func ParseAndExec(s string) (float64, error) {
+// err is not nil if an error occurs (including arithmetic runtime errors)
+func ParseAndExec(s string) (r float64, err error) {
 	toks, err := Parse(s)
 	if err != nil {
 		return 0, err
@@ -20,7 +23,12 @@ func ParseAndExec(s string) (float64, error) {
 	if ast.Err != nil {
 		return 0, ast.Err
 	}
-	return ExprASTResult(ar), nil
+	defer func() {
+		if e := recover(); e != nil {
+			err = e.(error)
+		}
+	}()
+	return ExprASTResult(ar), err
 }
 
 func ErrPos(s string, pos int) string {
@@ -70,6 +78,7 @@ func expr2Radian(expr ExprAST) float64 {
 
 // Top level function
 // AST traversal
+// if an arithmetic runtime error occurs, a panic exception is thrown
 func ExprASTResult(expr ExprAST) float64 {
 	var l, r float64
 	switch expr.(type) {
@@ -85,6 +94,12 @@ func ExprASTResult(expr ExprAST) float64 {
 		case "*":
 			return l * r
 		case "/":
+			if r == 0 {
+				panic(errors.New(
+					fmt.Sprintf("violation of arithmetic specification: a division by zero in ExprASTResult: [%g/%g]",
+						l,
+						r)))
+			}
 			return l / r
 		case "%":
 			return float64(int(l) % int(r))
