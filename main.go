@@ -59,6 +59,12 @@ func exec(exp string) {
 		return
 	}
 	fmt.Printf("ExprAST: %+v\n", ar)
+	// catch runtime errors
+	defer func() {
+		if e := recover(); e != nil {
+			fmt.Println("ERROR: ", e)
+		}
+	}()
 	// AST traversal -> result
 	r := engine.ExprASTResult(ar)
 	fmt.Println("progressing ...\t", r)
