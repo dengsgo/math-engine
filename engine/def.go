@@ -29,6 +29,8 @@ var defFunC = map[string]int{
 	"sqrt":  1,
 	"cbrt":  1,
 
+	"noerr": 1,
+
 	"max": 2,
 	"min": 2,
 }
@@ -50,6 +52,8 @@ func init() {
 		"round": defRound,
 		"sqrt":  defSqrt,
 		"cbrt":  defCbrt,
+
+		"noerr": defNoerr,
 
 		"max": defMax,
 		"min": defMin,
@@ -129,4 +133,15 @@ func defMin(expr []ExprAST) float64 {
 
 func p2(expr []ExprAST) (float64, float64) {
 	return ExprASTResult(expr[0]), ExprASTResult(expr[1])
+}
+
+// noerr(1/0) = 0
+// noerr(2.5/(1-1)) = 0
+func defNoerr(expr []ExprAST) (r float64) {
+	defer func() {
+		if e := recover(); e != nil {
+			r = 0
+		}
+	}()
+	return ExprASTResult(expr[0])
 }

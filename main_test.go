@@ -86,3 +86,13 @@ func TestExecQ(t *testing.T) {
 	exp := "2e-3*2+2e2+1"
 	exec(exp)
 }
+
+func TestExecR(t *testing.T) {
+	exp := "3.8 - 56 / (1-1) - 4"
+	exec(exp)
+}
+
+func TestExecS(t *testing.T) {
+	exp := "noerr(3.8 - 56 / (1-1) - 4)"
+	exec(exp)
+}
