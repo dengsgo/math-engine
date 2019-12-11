@@ -190,7 +190,12 @@ func (a *AST) parsePrimary() ExprAST {
 			a.getNextToken()
 			return e
 		} else if a.currTok.Tok == "-" {
-			a.getNextToken()
+			if a.getNextToken() == nil {
+				a.Err = errors.New(
+					fmt.Sprintf("want '0-9' but get '-'\n%s",
+						ErrPos(a.source, a.currTok.Offset)))
+				return nil
+			}
 			bin := BinaryExprAST{
 				Op:  "-",
 				Lhs: NumberExprAST{},
