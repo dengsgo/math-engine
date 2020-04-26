@@ -112,7 +112,7 @@ func ExprASTResult(expr ExprAST) float64 {
 		return expr.(NumberExprAST).Val
 	case FunCallerExprAST:
 		f := expr.(FunCallerExprAST)
-		return defFunc[f.Name](f.Arg)
+		return defFunc[f.Name](f.Arg...)
 	}
 
 	return 0.0
