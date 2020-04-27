@@ -14,6 +14,7 @@ type ExprAST interface {
 
 type NumberExprAST struct {
 	Val float64
+	Str string
 }
 
 type BinaryExprAST struct {
@@ -30,7 +31,7 @@ type FunCallerExprAST struct {
 func (n NumberExprAST) toStr() string {
 	return fmt.Sprintf(
 		"NumberExprAST:%s",
-		strconv.FormatFloat(n.Val, 'f', 0, 64),
+		n.Str,
 	)
 }
 
@@ -107,6 +108,7 @@ func (a *AST) parseNumber() NumberExprAST {
 	}
 	n := NumberExprAST{
 		Val: f64,
+		Str: a.currTok.Tok,
 	}
 	a.getNextToken()
 	return n
@@ -151,6 +153,7 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 	if v, ok := defConst[name]; ok {
 		return NumberExprAST{
 			Val: v,
+			Str: strconv.FormatFloat(v, 'f', 0, 10),
 		}
 	} else {
 		a.Err = errors.New(
