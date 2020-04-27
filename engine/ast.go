@@ -136,11 +136,12 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 			}
 			exprs = append(exprs, a.ParseExpression())
 		}
-		if len(exprs) != defFunC[name] {
+		def := defFunc[name]
+		if len(exprs) != def.argc {
 			a.Err = errors.New(
 				fmt.Sprintf("wrong way calling function `%s`, parameters want %d but get %d\n%s",
 					name,
-					defFunC[name],
+					def.argc,
 					len(exprs),
 					ErrPos(a.source, a.currTok.Offset)))
 		}
@@ -153,7 +154,7 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 	if v, ok := defConst[name]; ok {
 		return NumberExprAST{
 			Val: v,
-			Str: strconv.FormatFloat(v, 'f', 0, 10),
+			Str: strconv.FormatFloat(v, 'f', 0, 64),
 		}
 	} else {
 		a.Err = errors.New(

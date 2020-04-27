@@ -7,6 +7,11 @@ const (
 	AngleMode
 )
 
+type defS struct {
+	argc int
+	fun  func(expr ...ExprAST) float64
+}
+
 // enum "RadianMode", "AngleMode"
 var TrigonometricMode = RadianMode
 
@@ -14,49 +19,28 @@ var defConst = map[string]float64{
 	"pi": math.Pi,
 }
 
-var defFunC = map[string]int{
-	"sin": 1,
-	"cos": 1,
-	"tan": 1,
-	"cot": 1,
-	"sec": 1,
-	"csc": 1,
-
-	"abs":   1,
-	"ceil":  1,
-	"floor": 1,
-	"round": 1,
-	"sqrt":  1,
-	"cbrt":  1,
-
-	"noerr": 1,
-
-	"max": 2,
-	"min": 2,
-}
-
-var defFunc map[string]func(expr ...ExprAST) float64
+var defFunc map[string]defS
 
 func init() {
-	defFunc = map[string]func(expr ...ExprAST) float64{
-		"sin": defSin,
-		"cos": defCos,
-		"tan": defTan,
-		"cot": defCot,
-		"sec": defSec,
-		"csc": defCsc,
+	defFunc = map[string]defS{
+		"sin": defS{1, defSin},
+		"cos": defS{1, defCos},
+		"tan": defS{1, defTan},
+		"cot": defS{1, defCot},
+		"sec": defS{1, defSec},
+		"csc": defS{1, defCsc},
 
-		"abs":   defAbs,
-		"ceil":  defCeil,
-		"floor": defFloor,
-		"round": defRound,
-		"sqrt":  defSqrt,
-		"cbrt":  defCbrt,
+		"abs":   defS{1, defAbs},
+		"ceil":  defS{1, defCeil},
+		"floor": defS{1, defFloor},
+		"round": defS{1, defRound},
+		"sqrt":  defS{1, defSqrt},
+		"cbrt":  defS{1, defCbrt},
 
-		"noerr": defNoerr,
+		"noerr": defS{1, defNoerr},
 
-		"max": defMax,
-		"min": defMin,
+		"max": defS{2, defMax},
+		"min": defS{2, defMin},
 	}
 }
 
