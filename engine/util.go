@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"math/big"
+	"strconv"
 	"strings"
 )
 
@@ -76,7 +78,28 @@ func expr2Radian(expr ExprAST) float64 {
 	return r
 }
 
-// Top level function
+// Float64ToStr float64 -> string
+func Float64ToStr(f float64) string {
+	return strconv.FormatFloat(f, 'f', -1, 64)
+}
+
+// RegFunction is Top level function
+// register a new function to use in expressions
+func RegFunction(name string, argc int, fun func(...ExprAST) float64) error {
+	if len(name) == 0 {
+		return errors.New("RegFunction name is not empty.")
+	}
+	if argc < 1 {
+		return errors.New("RegFunction argc is must has one arg at least.")
+	}
+	if _, ok := defFunc[name]; ok {
+		return errors.New("RegFunction name is already exist.")
+	}
+	defFunc[name] = defS{argc, fun}
+	return nil
+}
+
+// ExprASTResult is a Top level function
 // AST traversal
 // if an arithmetic runtime error occurs, a panic exception is thrown
 func ExprASTResult(expr ExprAST) float64 {
@@ -88,11 +111,20 @@ func ExprASTResult(expr ExprAST) float64 {
 		r = ExprASTResult(ast.Rhs)
 		switch ast.Op {
 		case "+":
-			return l + r
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Add(lh, rh).Float64()
+			return f
 		case "-":
-			return l - r
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Sub(lh, rh).Float64()
+			return f
 		case "*":
-			return l * r
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Mul(lh, rh).Float64()
+			return f
 		case "/":
 			if r == 0 {
 				panic(errors.New(
@@ -100,7 +132,10 @@ func ExprASTResult(expr ExprAST) float64 {
 						l,
 						r)))
 			}
-			return l / r
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Quo(lh, rh).Float64()
+			return f
 		case "%":
 			return float64(int(l) % int(r))
 		case "^":
@@ -112,7 +147,8 @@ func ExprASTResult(expr ExprAST) float64 {
 		return expr.(NumberExprAST).Val
 	case FunCallerExprAST:
 		f := expr.(FunCallerExprAST)
-		return defFunc[f.Name](f.Arg...)
+		def := defFunc[f.Name]
+		return def.fun(f.Arg...)
 	}
 
 	return 0.0

@@ -23,24 +23,24 @@ var defFunc map[string]defS
 
 func init() {
 	defFunc = map[string]defS{
-		"sin": defS{1, defSin},
-		"cos": defS{1, defCos},
-		"tan": defS{1, defTan},
-		"cot": defS{1, defCot},
-		"sec": defS{1, defSec},
-		"csc": defS{1, defCsc},
+		"sin": {1, defSin},
+		"cos": {1, defCos},
+		"tan": {1, defTan},
+		"cot": {1, defCot},
+		"sec": {1, defSec},
+		"csc": {1, defCsc},
 
-		"abs":   defS{1, defAbs},
-		"ceil":  defS{1, defCeil},
-		"floor": defS{1, defFloor},
-		"round": defS{1, defRound},
-		"sqrt":  defS{1, defSqrt},
-		"cbrt":  defS{1, defCbrt},
+		"abs":   {1, defAbs},
+		"ceil":  {1, defCeil},
+		"floor": {1, defFloor},
+		"round": {1, defRound},
+		"sqrt":  {1, defSqrt},
+		"cbrt":  {1, defCbrt},
 
-		"noerr": defS{1, defNoerr},
+		"noerr": {1, defNoerr},
 
-		"max": defS{2, defMax},
-		"min": defS{2, defMin},
+		"max": {2, defMax},
+		"min": {2, defMin},
 	}
 }
 
