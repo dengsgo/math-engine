@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dengsgo/math-engine.svg?branch=master)](https://travis-ci.org/dengsgo/math-engine)  [![Go Report Card](https://goreportcard.com/badge/github.com/dengsgo/math-engine)](https://goreportcard.com/report/github.com/dengsgo/math-engine)  [![godoc.org](https://godoc.org/github.com/dengsgo/math-engine/engine?status.svg)](https://godoc.org/github.com/dengsgo/math-engine/engine)  
 
-使用 Go 实现的数学表达式解析计算引擎库，无任何依赖，相对比较完整的完成了数学表达式解析执行，包括词法分析、语法分析、构建AST、运行。  
+使用 Go 实现的数学表达式解析计算引擎库，它小巧，无任何依赖，具有扩展性(比如可以注册自己的函数到引擎中)，比较完整的完成了数学表达式解析执行，包括词法分析、语法分析、构建AST、运行。  
 
 `go get -u github.com/dengsgo/math-engine`  
 
@@ -12,8 +12,9 @@
 - `123_345_456 * 1.5 - 2 ^ 4`  
 - `-4 * 6 + 2e2 - 1.6e-3`  
 - `sin(pi/2)+cos(45-45*1)+tan(pi/4)`  
-- `99+abs(-1)-ceil(88.8)+floor(88.8)`
-- `max(min(2^3, 3^2), 10*1.5-7)`
+- `99+abs(-1)-ceil(88.8)+floor(88.8)`  
+- `max(min(2^3, 3^2), 10*1.5-7)`  
+- `double(6) + 3` , `double`是一个自定义的函数  
 
 ### Demo
 
@@ -48,6 +49,7 @@
 | `max(x, y)` | x, y 中的较大值              | max(2, 3) = 3                         |
 | `min(x, y)` | x, y 中的较小值              | min(2, 3) = 2                         |
 | `noerr(x)`  | 计算 x 出错时返回 0          | noerr(1 / 1)  = 1, noerr( 1/ 0 ) = 0  |
+| `double(x)`  | 返回 x 的双倍值，这是一个自定义的函数示例，你可以注册任意的自定义函数到引擎中  | double(6) = 12  |
 
 
 ## Usage  
@@ -60,7 +62,7 @@ go get -u github.com/dengsgo/math-engine
 ```go
 import "github.com/dengsgo/math-engine/engine"
 ```
-e.g. 1 直接调用解析执行函数 :
+e.g. 1 常规用法： 直接调用解析执行函数 :
 
 ```go
 import "github.com/dengsgo/math-engine/engine"
@@ -78,7 +80,7 @@ func main() {
 
 
 
-e.g. 2 依次调用函数，手动执行 :  
+e.g. 2 高级用法： 依次调用函数，手动执行 :  
 
 ```go
 import "github.com/dengsgo/math-engine/engine"
@@ -142,7 +144,41 @@ func main() {
 }
 ```
 
+## Register Function
 
+从 `v4.0` 开始， `math-engine` 提供了自定义函数注册到引擎的能力。你可以把常用的函数注册到引擎中，然后就能像内置函数一样在输入的数学表达式中使用。
+
+e.g 
+
+```go
+  // RegFunction is Top level function
+  // the same function name only needs to be registered once.
+  // double is register function name.
+  // 1 is a number of parameter signatures.
+  // func(expr ...engine.ExprAST) float64 is your function.
+  engine.RegFunction("double", 1, func(expr ...engine.ExprAST) float64 {
+    // you can use the index value directly according to the number of parameters
+	// without worrying about crossing the boundary.
+	// use ExprASTResult to get the result of the ExprAST structure.
+    return engine.ExprASTResult(expr[0]) * 2
+  })
+```
+
+然后你就可以在输入的表达式中使用这个函数 `double`:
+
+```go 
+exp := "double(6) + 2"
+r, err := engine.ParseAndExec("double(6) + 2")
+if err != nil {
+  panic(err)
+}
+fmt.Printf("double(6) + 2 = %f\n", r) // will print ： double(6) + 2 = 14.000000
+```
+
+注意事项：
+- 注册的函数名只能是英文字母（区分大小写）;
+- 每一个函数名只能且只需注册一次；
+- 注册的函数逻辑中如果有 panic ，需要程序自己捕获处理;
 
 ## Compile    
 
@@ -178,6 +214,8 @@ go build
 - [x] 三角函数 e.g. `sin, cos, tan, cot, sec, csc`
 - [x] 常量 pi
 - [x] 辅助函数 e.g. `abs, ceil, floor, sqrt, cbrt, max, min, noerr`
+- [x] 提供自定义函数注册功能，注册后可以在表达式中使用
+- [x] 精确的数据计算
 - [x] 友好的错误消息 e.g.    
 ```bash
 input /> 123+89-0.0.9
@@ -189,7 +227,3 @@ want '(' or '0-9' but get '0.0.9'
 ------------
 ```
 
-### 待实现  
-
-- [ ] 精确浮点计算    
-- [ ] 更多辅助函数
