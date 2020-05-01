@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/dengsgo/math-engine/engine"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/dengsgo/math-engine/engine"
 )
 
 func main() {
@@ -15,6 +16,9 @@ func main() {
 
 // input loop
 func loop() {
+	engine.RegFunction("double", 1, func(expr ...engine.ExprAST) float64 {
+		return engine.ExprASTResult(expr[0]) * 2
+	})
 	for {
 		fmt.Print("input /> ")
 		f := bufio.NewReader(os.Stdin)

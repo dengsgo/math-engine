@@ -106,6 +106,16 @@ func TestParseAndExecTrigonometric(t *testing.T) {
 	}
 }
 
+func TestRegFunction(t *testing.T) {
+	RegFunction("double", 1, func(expr ...ExprAST) float64 {
+		return ExprASTResult(expr[0]) * 2
+	})
+	r, err := ParseAndExec("double(6)")
+	if r != 12 {
+		t.Error(err, "RegFunction errors when register new funtion")
+	}
+}
+
 func TestParseAndExecError(t *testing.T) {
 	exprs := []string{
 		"(",
