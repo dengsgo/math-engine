@@ -158,8 +158,8 @@ e.g
   // func(expr ...engine.ExprAST) float64 is your function.
   engine.RegFunction("double", 1, func(expr ...engine.ExprAST) float64 {
     // you can use the index value directly according to the number of parameters
-	// without worrying about crossing the boundary.
-	// use ExprASTResult to get the result of the ExprAST structure.
+    // without worrying about crossing the boundary.
+    // use ExprASTResult to get the result of the ExprAST structure.
     return engine.ExprASTResult(expr[0]) * 2
   })
 ```
@@ -167,7 +167,7 @@ e.g
 然后你就可以在输入的表达式中使用这个函数 `double`:
 
 ```go 
-exp := "double(6) + 2"
+//exp := "double(6) + 2"
 r, err := engine.ParseAndExec("double(6) + 2")
 if err != nil {
   panic(err)
@@ -176,7 +176,7 @@ fmt.Printf("double(6) + 2 = %f\n", r) // will print ： double(6) + 2 = 14.00000
 ```
 
 注意事项：
-- 注册的函数名只能是英文字母（区分大小写）;
+- 注册的函数名只能是英文字母和数字，且必须英文字母开头（区分大小写）;
 - 每一个函数名只能且只需注册一次；
 - 注册的函数逻辑中如果有 panic ，需要程序自己捕获处理;
 
