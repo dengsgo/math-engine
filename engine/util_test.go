@@ -107,13 +107,40 @@ func TestParseAndExecTrigonometric(t *testing.T) {
 }
 
 func TestRegFunction(t *testing.T) {
-	RegFunction("double", 1, func(expr ...ExprAST) float64 {
-		return ExprASTResult(expr[0]) * 2
-	})
-	r, err := ParseAndExec("double(6)")
-	if r != 12 {
-		t.Error(err, "RegFunction errors when register new funtion")
+	funs := []struct {
+		Name string
+		Argc int
+		Fun  func(expr ...ExprAST) float64
+		Exp  string
+		R    float64
+	}{
+		{
+			"double",
+			1,
+			func(expr ...ExprAST) float64 {
+				return ExprASTResult(expr[0]) * 2
+			},
+			"double(6)",
+			12,
+		},
+		{
+			"percentage50",
+			1,
+			func(expr ...ExprAST) float64 {
+				return ExprASTResult(expr[0]) / 2
+			},
+			"percentage50(6)",
+			3,
+		},
 	}
+	for _, f := range funs {
+		_ = RegFunction(f.Name, f.Argc, f.Fun)
+		r, err := ParseAndExec(f.Exp)
+		if r != f.R {
+			t.Error(err, "RegFunction errors when register new function: ", f.Name)
+		}
+	}
+
 }
 
 func TestParseAndExecError(t *testing.T) {

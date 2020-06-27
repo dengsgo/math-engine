@@ -119,7 +119,7 @@ func (p *Parser) nextTok() *Token {
 
 	default:
 		if p.isChar(p.ch) {
-			for p.isChar(p.ch) && p.nextCh() == nil {
+			for p.isWordChar(p.ch) && p.nextCh() == nil {
 			}
 			tok = &Token{
 				Tok:  p.Source[start:p.offset],
@@ -161,4 +161,8 @@ func (p *Parser) isDigitNum(c byte) bool {
 
 func (p *Parser) isChar(c byte) bool {
 	return 'a' <= c && c <= 'z' || 'A' <= c && c <= 'Z'
+}
+
+func (p *Parser) isWordChar(c byte) bool {
+	return p.isChar(c) || '0' <= c && c <= '9'
 }
