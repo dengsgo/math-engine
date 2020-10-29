@@ -57,6 +57,7 @@ type AST struct {
 	source    string
 	currTok   *Token
 	currIndex int
+	depth     int
 
 	Err error
 }
@@ -76,8 +77,16 @@ func NewAST(toks []*Token, s string) *AST {
 }
 
 func (a *AST) ParseExpression() ExprAST {
+	a.depth++ // called depth
 	lhs := a.parsePrimary()
-	return a.parseBinOpRHS(0, lhs)
+	r := a.parseBinOpRHS(0, lhs)
+	a.depth--
+	if a.depth == 0 && a.currIndex != len(a.Tokens) {
+		a.Err = errors.New(
+			fmt.Sprintf("bad expression, reaching the end or missing the operator\n%s",
+				ErrPos(a.source, a.currTok.Offset)))
+	}
+	return r
 }
 
 func (a *AST) getNextToken() *Token {

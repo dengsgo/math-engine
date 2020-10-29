@@ -10,8 +10,6 @@ func TestParseAndExecSimple(t *testing.T) {
 	exprs := []U{
 		{"1", 1},
 		{"1+", 1},
-		{"1+1 111", 2},
-		{"1+1 111+2", 2},
 		{"1+2", 3},
 		{"-1+2", 1},
 		{"-(1+2)", -3},
@@ -161,6 +159,11 @@ func TestParseAndExecError(t *testing.T) {
 		"min(1,3, 099)",
 		"1/0",
 		"99.9 / (2-1-1)",
+		"(1+2)3",
+		"1+1 111",
+		"1+1 111+2",
+		"1 3",
+		"1 3-",
 	}
 	for _, e := range exprs {
 		_, err := ParseAndExec(e)
