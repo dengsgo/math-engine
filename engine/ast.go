@@ -81,7 +81,7 @@ func (a *AST) ParseExpression() ExprAST {
 	lhs := a.parsePrimary()
 	r := a.parseBinOpRHS(0, lhs)
 	a.depth--
-	if a.depth == 0 && a.currIndex != len(a.Tokens) {
+	if a.depth == 0 && a.currIndex != len(a.Tokens) && a.Err == nil {
 		a.Err = errors.New(
 			fmt.Sprintf("bad expression, reaching the end or missing the operator\n%s",
 				ErrPos(a.source, a.currTok.Offset)))
