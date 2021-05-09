@@ -127,7 +127,7 @@ func (p *Parser) nextTok() *Token {
 			}
 			tok.Offset = start
 		} else if p.ch != ' ' {
-			s := fmt.Sprintf("symbol error: unkown '%v', pos [%v:]\n%s",
+			s := fmt.Sprintf("symbol error: unknown '%v', pos [%v:]\n%s",
 				string(p.ch),
 				start,
 				ErrPos(p.Source, start))
