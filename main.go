@@ -50,6 +50,7 @@ func exec(exp string) {
 		fmt.Println("ERROR: " + err.Error())
 		return
 	}
+
 	// []token -> AST Tree
 	ast := engine.NewAST(toks, exp)
 	if ast.Err != nil {

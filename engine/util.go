@@ -44,30 +44,8 @@ func ErrPos(s string, pos int) string {
 }
 
 // the integer power of a number
-func Pow(x float64, n int) float64 {
-	if x == 0 {
-		return 0
-	}
-	r := calPow(x, n)
-	if n < 0 {
-		r = 1 / r
-	}
-	return r
-}
-
-func calPow(x float64, n int) float64 {
-	if n == 0 {
-		return 1
-	}
-	if n == 1 {
-		return x
-	}
-	r := calPow(x, n>>1) // move right 1 byte
-	r *= r
-	if n&1 == 1 {
-		r *= x
-	}
-	return r
+func Pow(x float64, n float64) float64 {
+	return math.Pow(x, n)
 }
 
 func expr2Radian(expr ExprAST) float64 {
@@ -135,7 +113,7 @@ func ExprASTResult(expr ExprAST) float64 {
 		case "%":
 			return float64(int(l) % int(r))
 		case "^":
-			return Pow(l, int(r))
+			return Pow(l, r)
 		default:
 
 		}
