@@ -111,6 +111,12 @@ func ExprASTResult(expr ExprAST) float64 {
 			f, _ := new(big.Float).Quo(new(big.Float).SetFloat64(l), new(big.Float).SetFloat64(r)).Float64()
 			return f
 		case "%":
+			if r == 0 {
+				panic(errors.New(
+					fmt.Sprintf("violation of arithmetic specification: a division by zero in ExprASTResult: [%g%%%g]",
+						l,
+						r)))
+			}
 			return float64(int(l) % int(r))
 		case "^":
 			return Pow(l, r)
