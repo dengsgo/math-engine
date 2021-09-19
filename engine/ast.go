@@ -138,15 +138,20 @@ func (a *AST) parseFunCallerOrConst() ExprAST {
 		}
 		a.getNextToken()
 		exprs := make([]ExprAST, 0)
-		exprs = append(exprs, a.ParseExpression())
-		for a.currTok.Tok != ")" && a.getNextToken() != nil {
-			if a.currTok.Type == COMMA {
-				continue
-			}
+		if a.currTok.Tok == ")" {
+			// function call without parameters
+			// ignore the process of parameter resolution
+		} else {
 			exprs = append(exprs, a.ParseExpression())
+			for a.currTok.Tok != ")" && a.getNextToken() != nil {
+				if a.currTok.Type == COMMA {
+					continue
+				}
+				exprs = append(exprs, a.ParseExpression())
+			}
 		}
 		def := defFunc[name]
-		if len(exprs) != def.argc {
+		if def.argc >= 0 && len(exprs) != def.argc {
 			a.Err = errors.New(
 				fmt.Sprintf("wrong way calling function `%s`, parameters want %d but get %d\n%s",
 					name,
