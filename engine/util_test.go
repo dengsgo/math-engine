@@ -52,6 +52,7 @@ func TestParseAndExecSimple(t *testing.T) {
 		{"127^2+5/2-sqrt(2^2) + cbrt(3^3)", 16132.5},
 		{"max(2)", 2},
 		{"max(abs(1)+10)", 11},
+		{"max(abs(1)+10)*2-1", 21},
 		{"max(2,3.5)", 3.5},
 		{"max(2^3,3+abs(-1)*6)", 9},
 		{"max(2^3,3+abs(-1)*6, 20)", 20},
