@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"errors"
 	"math"
 )
 
@@ -112,7 +113,7 @@ func defCbrt(expr ...ExprAST) float64 {
 // max(2, 3, 1) = 3
 func defMax(expr ...ExprAST) float64 {
 	if len(expr) == 0 {
-		panic("calling function `max` must have at least one parameter.")
+		panic(errors.New("calling function `max` must have at least one parameter."))
 	}
 	if len(expr) == 1 {
 		return ExprASTResult(expr[0])
@@ -130,7 +131,7 @@ func defMax(expr ...ExprAST) float64 {
 // min(2, 3, 1) = 1
 func defMin(expr ...ExprAST) float64 {
 	if len(expr) == 0 {
-		panic("calling function `min` must have at least one parameter.")
+		panic(errors.New("calling function `min` must have at least one parameter."))
 	}
 	if len(expr) == 1 {
 		return ExprASTResult(expr[0])
