@@ -160,7 +160,6 @@ func TestParseAndExecError(t *testing.T) {
 		"sin(1, 50)",
 		"max(1,)",
 		"min(1,)",
-		"min(1,3, 099)",
 		"1/0",
 		"99.9 / (2-1-1)",
 		"(1+2)3",

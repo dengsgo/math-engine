@@ -41,8 +41,8 @@ func init() {
 
 		"noerr": {1, defNoerr},
 
-		"max": {2, defMax},
-		"min": {2, defMin},
+		"max": {-1, defMax},
+		"min": {-1, defMin},
 	}
 }
 
@@ -107,18 +107,40 @@ func defCbrt(expr ...ExprAST) float64 {
 	return math.Cbrt(ExprASTResult(expr[0]))
 }
 
+// max(2) = 2
 // max(2, 3) = 3
+// max(2, 3, 1) = 3
 func defMax(expr ...ExprAST) float64 {
-	return math.Max(p2(expr...))
+	if len(expr) == 0 {
+		panic("calling function `max` must have at least one parameter.")
+	}
+	if len(expr) == 1 {
+		return ExprASTResult(expr[0])
+	}
+	maxV := ExprASTResult(expr[0])
+	for i := 1; i < len(expr); i++ {
+		v := ExprASTResult(expr[i])
+		maxV = math.Max(maxV, v)
+	}
+	return maxV
 }
 
-// max(2, 3) = 2
+// min(2) = 2
+// min(2, 3) = 2
+// min(2, 3, 1) = 1
 func defMin(expr ...ExprAST) float64 {
-	return math.Min(p2(expr...))
-}
-
-func p2(expr ...ExprAST) (float64, float64) {
-	return ExprASTResult(expr[0]), ExprASTResult(expr[1])
+	if len(expr) == 0 {
+		panic("calling function `min` must have at least one parameter.")
+	}
+	if len(expr) == 1 {
+		return ExprASTResult(expr[0])
+	}
+	maxV := ExprASTResult(expr[0])
+	for i := 1; i < len(expr); i++ {
+		v := ExprASTResult(expr[i])
+		maxV = math.Min(maxV, v)
+	}
+	return maxV
 }
 
 // noerr(1/0) = 0
