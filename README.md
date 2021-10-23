@@ -46,8 +46,8 @@
 | `round(x)`  | 四舍五入取整                 | round(4.4) = 4, round(4.5) = 5        |
 | `sqrt(x)`   | 平方根，square root          | sqrt(4) = 2                           |
 | `cbrt(x)`   | 立方根，cube root            | cbrt(27) = 3                          |
-| `max(x, y)` | x, y 中的较大值              | max(2, 3) = 3                         |
-| `min(x, y)` | x, y 中的较小值              | min(2, 3) = 2                         |
+| `max(x, ...)` | 参数中的较大值              | max(1)=1,max(2,3)=3,max(4,8,6,8,10)=10 |
+| `min(x, ...)` | 参数中的较小值              | min(1)=1,min(2,3)=2,max(4,8,6,8,10)=4 |
 | `noerr(x)`  | 计算 x 出错时返回 0          | noerr(1 / 1)  = 1, noerr( 1/ 0 ) = 0  |
 | `double(x)`  | 返回 x 的双倍值，这是一个自定义的函数示例，你可以注册任意的自定义函数到引擎中  | double(6) = 12  |
 
@@ -154,10 +154,10 @@ e.g
   // RegFunction is Top level function
   // the same function name only needs to be registered once.
   // double is register function name.
-  // 1 is a number of parameter signatures.
+  // 1 is a number of parameter signatures. should be -1, 0, or a positive integer
   // func(expr ...engine.ExprAST) float64 is your function.
   engine.RegFunction("double", 1, func(expr ...engine.ExprAST) float64 {
-    // you can use the index value directly according to the number of parameters
+    // when argc > 0，you can use the index value directly according to the number of parameters
     // without worrying about crossing the boundary.
     // use ExprASTResult to get the result of the ExprAST structure.
     return engine.ExprASTResult(expr[0]) * 2
@@ -178,7 +178,8 @@ fmt.Printf("double(6) + 2 = %f\n", r) // will print ： double(6) + 2 = 14.00000
 注意事项：
 - 注册的函数名只能是英文字母和数字，且必须英文字母开头（区分大小写）;
 - 每一个函数名只能且只需注册一次；
-- 注册的函数逻辑中如果有 panic ，需要程序自己捕获处理;
+- 注册的函数逻辑中如果有 panic ，需要程序自己捕获处理;  
+- argc=-1，即该函数的参数是可变的，expr 的长度需要开发者自行逻辑判断处理；
 
 ## Compile    
 

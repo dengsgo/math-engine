@@ -1,6 +1,10 @@
 package engine
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+	"time"
+)
 
 func TestParseAndExecSimple(t *testing.T) {
 	type U struct {
@@ -144,11 +148,35 @@ func TestRegFunction(t *testing.T) {
 			"percentage50(6)",
 			3,
 		},
+		{
+			"range",
+			0,
+			func(expr ...ExprAST) float64 {
+				return 10.0
+			},
+			"range()",
+			10,
+		},
+		{
+			"choice",
+			-1,
+			func(expr ...ExprAST) float64 {
+				rand.Seed(time.Now().UnixNano())
+				return ExprASTResult(expr[rand.Intn(len(expr))])
+			},
+			"choice(1.1, 9.8, 2.5, 100)",
+			10,
+		},
 	}
 	for _, f := range funs {
 		_ = RegFunction(f.Name, f.Argc, f.Fun)
 		r, err := ParseAndExec(f.Exp)
-		if r != f.R {
+		if f.Name == "choice" {
+			if !inSlices(r, []float64{1.1, 9.8, 2.5, 100}) {
+				t.Error(err, "RegFunction errors when register new function: ", f.Name)
+			}
+			continue
+		} else if r != f.R {
 			t.Error(err, "RegFunction errors when register new function: ", f.Name)
 		}
 	}
@@ -193,4 +221,13 @@ func TestParseAndExecError(t *testing.T) {
 			t.Error(e, " this is error expr!")
 		}
 	}
+}
+
+func inSlices(target float64, s []float64) bool {
+	for _, v := range s {
+		if v == target {
+			return true
+		}
+	}
+	return false
 }

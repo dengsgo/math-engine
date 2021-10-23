@@ -63,15 +63,19 @@ func Float64ToStr(f float64) string {
 
 // RegFunction is Top level function
 // register a new function to use in expressions
+// name: be register function name. the same function name only needs to be registered once.
+// argc: this is a number of parameter signatures. should be -1, 0, or a positive integer
+//       -1 variable-length argument; >=0 fixed numbers argument
+// fun:  function handler
 func RegFunction(name string, argc int, fun func(...ExprAST) float64) error {
 	if len(name) == 0 {
-		return errors.New("RegFunction name is not empty.")
+		return errors.New("RegFunction name is not empty")
 	}
-	if argc < 1 {
-		return errors.New("RegFunction argc is must has one arg at least.")
+	if argc < -1 {
+		return errors.New("RegFunction argc should be -1, 0, or a positive integer")
 	}
 	if _, ok := defFunc[name]; ok {
-		return errors.New("RegFunction name is already exist.")
+		return errors.New("RegFunction name is already exist")
 	}
 	defFunc[name] = defS{argc, fun}
 	return nil
