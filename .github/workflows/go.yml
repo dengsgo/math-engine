@@ -28,9 +28,9 @@ jobs:
         go env -w GOPROXY=https://goproxy.io,direct
         go get 
 
-    - name: Build
+    - name: Build Demo
       run: go build 
     
-    - name: Use
+    - name: Engine TestCase
       run: |
         go test -v ./engine/
