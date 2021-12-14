@@ -103,7 +103,9 @@ func ExprASTResult(expr ExprAST) float64 {
 			f, _ := new(big.Float).Sub(lh, rh).Float64()
 			return f
 		case "*":
-			f, _ := new(big.Float).Mul(new(big.Float).SetFloat64(l), new(big.Float).SetFloat64(r)).Float64()
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Mul(lh, rh).Float64()
 			return f
 		case "/":
 			if r == 0 {
@@ -112,7 +114,9 @@ func ExprASTResult(expr ExprAST) float64 {
 						l,
 						r)))
 			}
-			f, _ := new(big.Float).Quo(new(big.Float).SetFloat64(l), new(big.Float).SetFloat64(r)).Float64()
+			lh, _ := new(big.Float).SetString(Float64ToStr(l))
+			rh, _ := new(big.Float).SetString(Float64ToStr(r))
+			f, _ := new(big.Float).Quo(lh, rh).Float64()
 			return f
 		case "%":
 			if r == 0 {
