@@ -99,6 +99,8 @@ func defRound(expr ...ExprAST) float64 {
 }
 
 // sqrt(4) = 2
+// sqrt(4) = abs(sqrt(4))
+// returns only the absolute value of the result
 func defSqrt(expr ...ExprAST) float64 {
 	return math.Sqrt(ExprASTResult(expr[0]))
 }
