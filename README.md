@@ -44,7 +44,7 @@
 | `ceil(x)`   | 向上取整                     | ceil(4.2) = 5                         |
 | `floor(x)`  | 向下取整                     | floor(4.8) = 4                        |
 | `round(x)`  | 四舍五入取整                 | round(4.4) = 4, round(4.5) = 5        |
-| `sqrt(x)`   | 平方根，square root          | sqrt(4) = abs(sqrt(4)) = abs(2) = 2   |
+| `sqrt(x)`   | 平方根，square root          | sqrt(4) = abs(sqrt(4)) = 2            |
 | `cbrt(x)`   | 立方根，cube root            | cbrt(27) = 3                          |
 | `max(x, ...)` | 参数中的较大值              | max(1)=1,max(2,3)=3,max(4,8,6,8,10)=10 |
 | `min(x, ...)` | 参数中的较小值              | min(1)=1,min(2,3)=2,max(4,8,6,8,10)=4 |
