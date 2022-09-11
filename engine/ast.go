@@ -190,7 +190,7 @@ func (a *AST) parsePrimary() ExprAST {
 			t := a.getNextToken()
 			if t == nil {
 				a.Err = errors.New(
-					fmt.Sprintf("want '0-9' but nothing at all\n%s",
+					fmt.Sprintf("want '(' or '0-9' but get EOF\n%s",
 						ErrPos(a.source, a.currTok.Offset)))
 				return nil
 			}
@@ -242,7 +242,10 @@ func (a *AST) parseBinOpRHS(execPrec int, lhs ExprAST) ExprAST {
 		}
 		binOp := a.currTok.Tok
 		if a.getNextToken() == nil {
-			return lhs
+			a.Err = errors.New(
+				fmt.Sprintf("want '(' or '0-9' but get EOF\n%s",
+					ErrPos(a.source, a.currTok.Offset)))
+			return nil
 		}
 		rhs := a.parsePrimary()
 		if rhs == nil {
